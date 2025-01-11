@@ -58,6 +58,7 @@ class DeviceConnection(StrEnum):
 class DeviceNumber(Enum):
 	CENTRAL_UNIT = 0
 	MOBILE_APPLICATION = 251
+	MOBILE_APPLICATION_1 = 250 #johan
 	USB = 254
 
 
