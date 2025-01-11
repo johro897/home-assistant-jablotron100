@@ -1308,8 +1308,7 @@ class Jablotron:
 				self._log_debug_with_packet("State packet of central unit", packet)
 
 			return
-
-		if device_number in (DeviceNumber.MOBILE_APPLICATION.value, DeviceNumber.USB.value):
+		if device_number in (DeviceNumber.MOBILE_APPLICATION.value, DeviceNumber.USB.value, DeviceNumber.MOBILE_APPLICATION_1.value): #johan
 			self._set_last_authorized_user_or_device_from_device_state_packet(packet, device_number)
 			return
 
@@ -2119,7 +2118,7 @@ class Jablotron:
 		return False
 
 	def _set_last_authorized_user_or_device_from_device_state_packet(self, packet: bytes, device_number: int) -> None:
-		if device_number not in (DeviceNumber.MOBILE_APPLICATION.value, DeviceNumber.USB.value):
+		if device_number not in (DeviceNumber.MOBILE_APPLICATION.value, DeviceNumber.USB.value, DeviceNumber.MOBILE_APPLICATION_1.value): #johan
 			if self._is_central_unit_103_or_similar():
 				info_binary = self._bytes_to_binary(packet[4:5])
 				if info_binary[5:6] == "0":
@@ -2128,7 +2127,7 @@ class Jablotron:
 					return
 
 		offset = 104 if self._is_central_unit_101_or_similar() else 44
-		if device_number in (DeviceNumber.MOBILE_APPLICATION.value, DeviceNumber.USB.value):
+		if device_number in (DeviceNumber.MOBILE_APPLICATION.value, DeviceNumber.USB.value, DeviceNumber.MOBILE_APPLICATION_1.value): #johan
 			offset = offset - 1
 
 		user_no = int((self.bytes_to_int(packet[3:4]) - offset) / 4)
@@ -2580,7 +2579,7 @@ class Jablotron:
 		return STATE_ON if state.fire else STATE_OFF
 
 	@staticmethod
-	def _parse_jablotron_section_state(section_binary: str) -> JablotronSectionState:
+	def _parse_jablotron_section_state(section_binary: str) -> JablotronSectionState:		
 		return JablotronSectionState(
 			SectionPrimaryState(Jablotron.binary_to_int(section_binary[5:8])),
 			arming=section_binary[0:1] == "1",
